@@ -58,7 +58,7 @@ try {
 
             $relativePath = $requestPath.TrimStart('/').Replace('/', [System.IO.Path]::DirectorySeparatorChar)
             $filePath = [System.IO.Path]::GetFullPath((Join-Path $siteRoot $relativePath))
-            $insideRoot = $filePath.StartsWith($siteRoot, [System.StringComparison]::OrdinalIgnoreCase)
+            $insideRoot = $filePath.StartsWith($siteRoot + [System.IO.Path]::DirectorySeparatorChar, [System.StringComparison]::OrdinalIgnoreCase)
 
             if ($insideRoot -and (Test-Path -LiteralPath $filePath -PathType Leaf)) {
                 $body = [System.IO.File]::ReadAllBytes($filePath)

@@ -1,0 +1,102 @@
+import test from 'node:test'
+import assert from 'node:assert/strict'
+import { BROADCAST, hosts, normalizeMac, inspectMac, receiveFrame, frameSize, encapsulationStages, runCommand, checkWifi, scoreQuiz } from '../src/lib/network.js'
+const frame = (from, to, overrides = {}) => ({ source: hosts[from].mac, destination: hosts[to].mac, ingress: hosts[from].port, ...overrides })
+
+test('aprende exclusivamente origen, flooding excluye entrada y conserva tabla anterior', () => {
+  const original = {}, result = receiveFrame(original, frame(0, 1), hosts)
+  assert.deepEqual(original, {})
+  assert.equal(Object.keys(result.table).length, 1)
+  assert.equal(result.table[`1/${hosts[0].mac}`].port, 'Fa0/1')
+  assert.deepEqual(result.egress, ['Fa0/2', 'Fa0/3', 'Fa0/4'])
+  assert.match(result.action, /desconocido/)
+})
+test('respuesta aprende destino original y tráfico conocido sale por un solo puerto', () => {
+  const first = receiveFrame({}, frame(0, 1), hosts)
+  const reply = receiveFrame(first.table, frame(1, 0), hosts)
+  assert.deepEqual(reply.egress, ['Fa0/1'])
+  assert.deepEqual(receiveFrame(reply.table, frame(0, 1), hosts).egress, ['Fa0/2'])
+  assert.equal(Object.keys(reply.table).length, 2)
+})
+test('broadcast se difunde incluso con tabla conocida, sin aprender FF como origen', () => {
+  const first = receiveFrame({}, frame(1, 0), hosts)
+  const result = receiveFrame(first.table, frame(0, 1, { destination: BROADCAST }), hosts)
+  assert.deepEqual(result.egress, ['Fa0/2', 'Fa0/3', 'Fa0/4'])
+  assert.equal(result.action, 'Broadcast')
+  assert.throws(() => receiveFrame({}, frame(0, 1, { source: BROADCAST }), hosts))
+})
+test('filtra destino en puerto entrante y actualiza MAC al cambiar puerto', () => {
+  assert.deepEqual(receiveFrame({}, frame(0, 0), hosts).egress, [])
+  const table = receiveFrame({}, frame(2, 1), hosts).table
+  const moved = hosts.map(h => h.id === 'PC2' ? { ...h, port: 'Fa0/10' } : h)
+  const result = receiveFrame(table, frame(2, 0, { ingress: 'Fa0/10' }), moved)
+  assert.equal(result.table[`1/${hosts[2].mac}`].port, 'Fa0/10')
+  assert.deepEqual(receiveFrame(result.table, frame(0, 2), moved).egress, ['Fa0/10'])
+  assert.equal(Object.keys(receiveFrame({}, frame(0, 1), hosts).table).length, 1)
+})
+test('VLAN limita flooding y búsqueda; multicast sin snooping se difunde', () => {
+  const ports = hosts.map((h, i) => ({ ...h, vlan: i < 2 ? 1 : 2 }))
+  const table = receiveFrame({}, frame(2, 3, { vlan: 2 }), ports).table
+  assert.deepEqual(receiveFrame(table, frame(0, 2), ports).egress, ['Fa0/2'])
+  assert.deepEqual(receiveFrame({}, frame(0, 1, { destination: '01:00:5E:00:00:FB' }), ports).egress, ['Fa0/2'])
+  assert.throws(() => receiveFrame({}, frame(0, 1, { vlan: 2 }), ports))
+})
+test('formatos MAC, clasificación y conversión numérica', () => {
+  assert.equal(normalizeMac('3cd9.2b7a.10f4'), '3C:D9:2B:7A:10:F4')
+  assert.equal(normalizeMac('3c-d9-2b-7a-10-f4'), '3C:D9:2B:7A:10:F4')
+  const info = inspectMac('3CD92B7A10F4')
+  assert.deepEqual(info.octets, [60, 217, 43, 122, 16, 244])
+  assert.equal(info.binary[0], '00111100')
+  assert.equal(info.eui64, 'fe80::3ed9:2bff:fe7a:10f4')
+  assert.equal(inspectMac('0A:1B:2C:3D:4E:5F').eui64, 'fe80::081b:2cff:fe3d:4e5f')
+  assert.equal(inspectMac(BROADCAST).type, 'Broadcast')
+  assert.equal(inspectMac('01:00:5E:00:00:FB').type, 'Multicast')
+  assert.equal(inspectMac(hosts[0].mac).local, true)
+  for (const bad of ['AA:01', 'GG:00:00:00:00:00', '02:::0000000001', '']) assert.throws(() => normalizeMac(bad))
+})
+test('tamaños Ethernet II y SNAP: mínimo, máximo, padding y límites', () => {
+  assert.deepEqual(frameSize(28), { llc: 0, data: 28, padding: 18, total: 64, physical: 72 })
+  assert.equal(frameSize(1500).total, 1518)
+  assert.equal(frameSize(0).padding, 46)
+  assert.deepEqual(frameSize(28, 'snap'), { llc: 8, data: 36, padding: 10, total: 64, physical: 72 })
+  assert.equal(frameSize(1492, 'snap').total, 1518)
+  for (const bad of [-1, NaN, 0.5, 1501]) assert.throws(() => frameSize(bad))
+  assert.throws(() => frameSize(1493, 'snap'))
+})
+test('PDU sigue orden emisor/receptor y diferencia TCP de UDP', () => {
+  assert.deepEqual(encapsulationStages().map(s => s.pdu), ['Datos', 'Segmento', 'Paquete', 'Trama', 'Bits'])
+  assert.deepEqual(encapsulationStages('UDP', true).map(s => s.pdu), ['Bits', 'Trama', 'Paquete', 'Datagrama', 'Datos'])
+  assert.match(encapsulationStages('TCP', true)[1].header, /Router0.*Server0/)
+  assert.match(encapsulationStages()[3].header, /PC0.*Router0/)
+})
+test('CLI tiene estado ARP local y gateway remoto, sin MAC remota en caché', () => {
+  assert.match(runCommand('arp -a').lines[0], /vacía/)
+  assert.match(runCommand('IPCONFIG   /ALL').lines.join('\n'), /02:00:00:00:10:10/)
+  const remote = runCommand('ping 192.168.30.10')
+  assert.deepEqual(Object.keys(remote.cache), ['192.168.10.1'])
+  assert.match(remote.lines.at(-1), /0% pérdida/)
+  const local = runCommand('ping 192.168.10.11', remote.cache)
+  assert.equal(Object.keys(local.cache).length, 2)
+  assert.match(runCommand('arp -a', local.cache).lines.join('\n'), /192.168.10.11/)
+  assert.equal(runCommand('tracert 192.168.30.10').lines.length, 2)
+  assert.match(runCommand('ping 192.168.10.99').lines.at(-1), /100%/)
+  assert.match(runCommand('tracert 192.168.10.99').lines[0], /traza simplificada/)
+  assert.match(runCommand('ping 999.0.0.1').lines[0], /Sintaxis/)
+  assert.match(runCommand('ping 192.168.10.1 extra').lines[0], /Sintaxis/)
+  assert.match(runCommand('rm -rf').explanation, /no ejecuta/)
+})
+test('Wi-Fi exige seguridad y coincidencia; no acepta WEP ni credenciales vacías', () => {
+  const ap = { ssid: 'Practica', security: 'WPA2', band: '5', password: 'ClaveFicticia123' }
+  assert.equal(checkWifi(ap, { ...ap }).ok, true)
+  for (const key of ['ssid', 'security', 'band', 'password']) assert.equal(checkWifi(ap, { ...ap, [key]: 'incorrecto' }).ok, false)
+  assert.equal(checkWifi({ ...ap, security: 'WEP' }, ap).ok, false)
+  assert.equal(checkWifi({ ...ap, password: '' }, ap).ok, false)
+  assert.equal(checkWifi({ ...ap, ssid: 'á'.repeat(17) }, ap).ok, false)
+})
+test('puntuación exacta para respuestas correctas, incorrectas y pendientes', () => {
+  const qs = [{ answer: 0 }, { answer: 1 }, { answer: 3 }, { answer: 2 }]
+  assert.deepEqual(scoreQuiz(qs, [0, 1, 3, 2]), { correct: 4, total: 4, percent: 100 })
+  assert.equal(scoreQuiz(qs, [0, 0, 3]).percent, 50)
+  assert.equal(scoreQuiz(qs, []).correct, 0)
+  assert.equal(scoreQuiz([], []).percent, 0)
+})

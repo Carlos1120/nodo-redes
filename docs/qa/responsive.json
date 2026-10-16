@@ -1,0 +1,254 @@
+[
+  {
+    "brokenImages": 0,
+    "route": "#/inicio",
+    "scrollWidth": 345,
+    "width": 360
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/fundamentos",
+    "scrollWidth": 345,
+    "width": 360
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/arquitectura",
+    "scrollWidth": 345,
+    "width": 360
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/infraestructura",
+    "scrollWidth": 345,
+    "width": 360
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/labs",
+    "scrollWidth": 345,
+    "width": 360
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/evidencias",
+    "scrollWidth": 345,
+    "width": 360
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte",
+    "scrollWidth": 345,
+    "width": 360
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte/ethernet",
+    "scrollWidth": 345,
+    "width": 360
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte/mac",
+    "scrollWidth": 345,
+    "width": 360
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte/trama",
+    "scrollWidth": 345,
+    "width": 360
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte/pdu",
+    "scrollWidth": 345,
+    "width": 360
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte/medios",
+    "scrollWidth": 345,
+    "width": 360
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte/laboratorios",
+    "scrollWidth": 345,
+    "width": 360
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte/seguridad",
+    "scrollWidth": 345,
+    "width": 360
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/inicio",
+    "scrollWidth": 753,
+    "width": 768
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/fundamentos",
+    "scrollWidth": 753,
+    "width": 768
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/arquitectura",
+    "scrollWidth": 753,
+    "width": 768
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/infraestructura",
+    "scrollWidth": 753,
+    "width": 768
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/labs",
+    "scrollWidth": 753,
+    "width": 768
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/evidencias",
+    "scrollWidth": 753,
+    "width": 768
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte",
+    "scrollWidth": 753,
+    "width": 768
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte/ethernet",
+    "scrollWidth": 753,
+    "width": 768
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte/mac",
+    "scrollWidth": 753,
+    "width": 768
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte/trama",
+    "scrollWidth": 753,
+    "width": 768
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte/pdu",
+    "scrollWidth": 753,
+    "width": 768
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte/medios",
+    "scrollWidth": 753,
+    "width": 768
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte/laboratorios",
+    "scrollWidth": 753,
+    "width": 768
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte/seguridad",
+    "scrollWidth": 753,
+    "width": 768
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/inicio",
+    "scrollWidth": 1425,
+    "width": 1440
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/fundamentos",
+    "scrollWidth": 1425,
+    "width": 1440
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/arquitectura",
+    "scrollWidth": 1425,
+    "width": 1440
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/infraestructura",
+    "scrollWidth": 1425,
+    "width": 1440
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/labs",
+    "scrollWidth": 1425,
+    "width": 1440
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/evidencias",
+    "scrollWidth": 1425,
+    "width": 1440
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte",
+    "scrollWidth": 1425,
+    "width": 1440
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte/ethernet",
+    "scrollWidth": 1425,
+    "width": 1440
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte/mac",
+    "scrollWidth": 1425,
+    "width": 1440
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte/trama",
+    "scrollWidth": 1425,
+    "width": 1440
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte/pdu",
+    "scrollWidth": 1425,
+    "width": 1440
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte/medios",
+    "scrollWidth": 1425,
+    "width": 1440
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte/laboratorios",
+    "scrollWidth": 1425,
+    "width": 1440
+  },
+  {
+    "brokenImages": 0,
+    "route": "#/segundo-corte/seguridad",
+    "scrollWidth": 1425,
+    "width": 1440
+  }
+]

@@ -5,7 +5,7 @@ import { labs, evidence } from '../data/content'
 import NetworkTerminal from '../components/NetworkTerminal'
 import PracticeLink, { clearPracticeTarget, getPracticeTarget } from '../components/PracticeLink'
 
-export default function Labs(){
+export default function Labs({ route }){
   useEffect(() => {
     const targetId = getPracticeTarget()
     if (!targetId) return
@@ -18,7 +18,7 @@ export default function Labs(){
       window.setTimeout(() => target.classList.remove('practice-highlight'), 1800)
     }, 120)
     return () => window.clearTimeout(timer)
-  }, [])
+  }, [route])
   return <PageShell eyebrow="CISCO PACKET TRACER" title="Laboratorio de redes: configurar, probar y entender." intro="La parte práctica de CCNA 1 convierte conceptos en conexiones reales dentro del simulador. Cada laboratorio deja una evidencia y una lección.">
     <section className="container content-stack">
       <div className="lab-manifesto"><span>TEORÍA</span><i>+</i><span>PRÁCTICA</span><i>=</i><strong>COMPRENSIÓN</strong></div>
