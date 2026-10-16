@@ -30,7 +30,7 @@ export default function App(){
   const nav=[['inicio','Inicio'],['fundamentos','Fundamentos'],['arquitectura','Arquitectura'],['infraestructura','Infraestructura'],['labs','Packet Tracer'],['evidencias','Evidencias'],['segundo-corte','2.° corte']]
   return <div className="app-shell">
     <NetworkBackdrop global />
-    <header className="site-nav"><button className="brand" onClick={()=>go('inicio')}><span>N</span><strong>NODO</strong><small>REDES EN MOVIMIENTO</small></button><nav className={menu?'open':''}>{nav.map(([r,l])=><button key={r} className={route===r?'active':''} onClick={()=>go(r)}>{l}</button>)}</nav><button className="menu-btn" onClick={()=>setMenu(!menu)} aria-label="Abrir navegación">{menu?'×':'☰'}</button></header>
+    <header className="site-nav"><button className="brand" onClick={()=>go('inicio')}><span>N</span><strong>NODO</strong><small>REDES EN MOVIMIENTO</small></button><nav id="main-navigation" className={menu?'open':''}>{nav.map(([r,l])=><button key={r} className={route.split('/')[0]===r?'active':''} aria-current={route.split('/')[0]===r?'page':undefined} onClick={()=>go(r)}>{l}</button>)}</nav><button className="menu-btn" onClick={()=>setMenu(!menu)} aria-label={menu?'Cerrar navegación':'Abrir navegación'} aria-expanded={menu} aria-controls="main-navigation">{menu?'×':'☰'}</button></header>
     <Page go={go} route={route}/>
     <footer className="site-footer"><div className="container"><div><strong>NODO</strong><span>Redes · Cisco CCNA 1 · Packet Tracer</span></div><div><span>Carlos Mario Peña</span><span>Santiago Ortiz Ochoa</span></div><small>Proyecto académico en crecimiento · 2026</small></div></footer>
   </div>

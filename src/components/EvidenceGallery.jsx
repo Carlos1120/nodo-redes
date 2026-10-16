@@ -1,7 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 export default function EvidenceGallery({ items }) {
   const [openIndex,setOpenIndex]=useState(null)
+  const dialogRef = useRef(null)
+  const returnFocus = useRef(null)
   const open = openIndex === null ? null : items[openIndex]
   const siblings = useMemo(() => open ? items.map((item,index) => ({ item,index })).filter(({item}) => item.labId === open.labId) : [], [items, open])
   const siblingPosition = siblings.findIndex(({index}) => index === openIndex)
@@ -12,14 +14,24 @@ export default function EvidenceGallery({ items }) {
   }
   useEffect(() => {
     if (!open) return undefined
+    returnFocus.current = document.activeElement
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    dialogRef.current?.querySelector('button')?.focus()
     const onKeyDown = (event) => {
       if (event.key === 'Escape') setOpenIndex(null)
       if (event.key === 'ArrowLeft') move(-1)
       if (event.key === 'ArrowRight') move(1)
+      if (event.key === 'Tab') {
+        const buttons = [...dialogRef.current.querySelectorAll('button')]
+        const first = buttons[0], last = buttons.at(-1)
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus() }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus() }
+      }
     }
     window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  })
+    return () => { window.removeEventListener('keydown', onKeyDown); document.body.style.overflow = previousOverflow; returnFocus.current?.focus() }
+  }, [openIndex])
   return <>
     <div className="evidence-grid">
       {items.map((item,index)=><button id={items.findIndex((candidate) => candidate.labId === item.labId) === index ? `evidence-${item.labId}` : undefined} type="button" className={`evidence-shot e${index%3}`} key={item.src} onClick={()=>setOpenIndex(index)}>
@@ -27,7 +39,7 @@ export default function EvidenceGallery({ items }) {
         <span className="evidence-card-copy"><small>{item.lab}</small><strong>{item.title}</strong><em>{item.concept}</em><b>{item.result}</b></span>
       </button>)}
     </div>
-    {open && <div className="lightbox evidence-lightbox" role="dialog" aria-modal="true" aria-label={`Evidencia ${open.title}`} onClick={()=>setOpenIndex(null)}>
+    {open && <div ref={dialogRef} className="lightbox evidence-lightbox" role="dialog" aria-modal="true" aria-label={`Evidencia ${open.title}`} onClick={()=>setOpenIndex(null)}>
       <button type="button" className="close-lightbox" aria-label="Cerrar evidencia" onClick={()=>setOpenIndex(null)}>×</button>
       <div className="lightbox-card evidence-modal" onClick={event=>event.stopPropagation()}>
         <div className="evidence-modal-image"><img src={open.src} alt={open.label}/><span>{open.lab}</span></div>
