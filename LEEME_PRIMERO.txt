@@ -1,0 +1,49 @@
+============================================================
+ NODO - REDES EN MOVIMIENTO
+ Guia rapida para visualizar y editar el proyecto
+============================================================
+
+SOLO QUIERO VER E INTERACTUAR CON LA PAGINA (WINDOWS)
+-----------------------------------------------------
+1. Descomprime completamente el archivo ZIP.
+2. Abre la carpeta descomprimida.
+3. Haz doble clic en: 1-ABRIR-SITIO-WINDOWS.cmd
+4. El navegador se abrira automaticamente.
+5. Mantén abierta la ventana negra mientras visitas la pagina.
+
+Esta opcion no necesita Node.js, npm ni conexion a Internet.
+Para cerrar el sitio, vuelve a la ventana negra y presiona Ctrl+C.
+
+
+QUIERO REVISAR O MODIFICAR EL CODIGO (WINDOWS)
+----------------------------------------------
+1. Instala Node.js LTS desde https://nodejs.org/ si aun no lo tienes.
+2. Haz doble clic en: 2-INICIAR-DESARROLLO-WINDOWS.cmd
+3. La primera ejecucion instalara las dependencias automaticamente.
+4. El navegador se abrira cuando el proyecto este listo.
+
+
+MACOS O LINUX
+-------------
+1. Instala Node.js LTS desde https://nodejs.org/ si aun no lo tienes.
+2. Abre una terminal dentro de esta carpeta.
+3. Ejecuta: sh INICIAR-MAC-LINUX.sh
+
+
+ARCHIVOS IMPORTANTES
+--------------------
+src/                 Codigo fuente de React.
+public/evidence/     Capturas reales de Cisco Packet Tracer.
+dist/                Version compilada y lista para visualizar.
+package.json         Dependencias y tareas del proyecto.
+
+
+SI ALGO NO ABRE
+---------------
+- Comprueba que descomprimiste el ZIP antes de ejecutar los archivos.
+- No muevas los iniciadores fuera de la carpeta del proyecto.
+- En desarrollo, comprueba tu conexion a Internet durante la primera ejecucion.
+- Si Windows muestra una advertencia, verifica que el archivo proviene de la
+  persona que te compartio este proyecto antes de ejecutarlo.
+
+Proyecto academico de Redes / Cisco CCNA 1 / Packet Tracer.
