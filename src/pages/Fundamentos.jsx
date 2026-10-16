@@ -9,7 +9,7 @@ export default function Fundamentos(){
       <div className="three-pillars">
         <article><span>01</span><h3>Equipos</h3><p>Son los dispositivos que participan: computadores, celulares, servidores, switches, routers, impresoras y más.</p></article>
         <article><span>02</span><h3>Medio</h3><p>Es el camino por donde viaja la información: cable Ethernet, fibra óptica, Wi‑Fi, radio o redes móviles.</p></article>
-        <article><span>03</span><h3>Protocolos</h3><p>Son las reglas que permiten que los equipos se entiendan. Ejemplos: IP, TCP, HTTP, DNS y DHCP.</p><PracticeLink target="network-terminal">Ver un ping real</PracticeLink></article>
+        <article><span>03</span><h3>Protocolos</h3><p>Son las reglas que permiten que los equipos se entiendan. Ejemplos: IP, TCP, HTTP, DNS y DHCP.</p><PracticeLink target="network-terminal">Probar un ping simulado</PracticeLink></article>
       </div>
 
       <div className="concept-band"><div><span className="eyebrow">DEFINICIÓN CENTRAL</span><h2>Red = dispositivos + medio + reglas</h2></div><p>Una red de computadores es la interconexión de dos o más dispositivos que pueden comunicarse, intercambiar información y compartir recursos.</p></div>
