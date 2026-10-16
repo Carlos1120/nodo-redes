@@ -1,0 +1,16 @@
+[
+  {
+    "name": "desktop",
+    "time": 12.017779,
+    "total": 364,
+    "dropped": 5,
+    "error": null
+  },
+  {
+    "name": "mobile",
+    "time": 12.023902,
+    "total": 363,
+    "dropped": 0,
+    "error": null
+  }
+]
