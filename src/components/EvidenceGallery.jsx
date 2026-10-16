@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 export default function EvidenceGallery({ items }) {
   const [openIndex,setOpenIndex]=useState(null)
+  const isOpen = openIndex !== null
   const dialogRef = useRef(null)
   const returnFocus = useRef(null)
   const open = openIndex === null ? null : items[openIndex]
@@ -13,11 +14,15 @@ export default function EvidenceGallery({ items }) {
     setOpenIndex(siblings[next].index)
   }
   useEffect(() => {
-    if (!open) return undefined
+    if (!isOpen) return undefined
     returnFocus.current = document.activeElement
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     dialogRef.current?.querySelector('button')?.focus()
+    return () => { document.body.style.overflow = previousOverflow; returnFocus.current?.focus() }
+  }, [isOpen])
+  useEffect(() => {
+    if (!open) return undefined
     const onKeyDown = (event) => {
       if (event.key === 'Escape') setOpenIndex(null)
       if (event.key === 'ArrowLeft') move(-1)
@@ -30,7 +35,7 @@ export default function EvidenceGallery({ items }) {
       }
     }
     window.addEventListener('keydown', onKeyDown)
-    return () => { window.removeEventListener('keydown', onKeyDown); document.body.style.overflow = previousOverflow; returnFocus.current?.focus() }
+    return () => window.removeEventListener('keydown', onKeyDown)
   }, [openIndex])
   return <>
     <div className="evidence-grid">

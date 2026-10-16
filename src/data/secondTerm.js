@@ -44,5 +44,6 @@ export const technicalSources = [
   ['Cisco · conmutación LAN', 'https://www.cisco.com/c/en/us/support/docs/lan-switching/ethernet/12006-chapter22.html'],
   ['Cisco · formato Ethernet', 'https://www.cisco.com/en/US/docs/internetworking/troubleshooting/guide/tr1904.html'],
   ['RFC 826 · ARP', 'https://www.rfc-editor.org/info/rfc826/'],
+  ['RFC 4291 · EUI-64 modificado', 'https://www.rfc-editor.org/info/rfc4291/'],
   ['Cisco · distancias de módulos SFP', 'https://www.cisco.com/c/en/us/products/collateral/interfaces-modules/gigabit-ethernet-gbic-sfp-modules/datasheet-c78-366584.html'],
 ]
