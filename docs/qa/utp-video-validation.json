@@ -1,0 +1,75 @@
+{
+  "browser": "154.0.8037.57",
+  "results": [
+    {
+      "name": "desktop-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mobileEmulation": false,
+      "dimensions": {
+        "viewport": 1440,
+        "page": 1440,
+        "left": 159,
+        "right": 798.90625,
+        "width": 639.90625,
+        "height": 359.9375,
+        "controls": true,
+        "playsInline": true,
+        "poster": "http://127.0.0.1:4174/videos/ponchado-utp-rj45-poster.jpg"
+      },
+      "playback": {
+        "duration": 142.198333,
+        "currentTime": 142.198333,
+        "ended": true,
+        "error": null,
+        "readyState": 4,
+        "width": 1024,
+        "height": 576,
+        "droppedFrames": 1406,
+        "totalFrames": 4265
+      },
+      "pageErrors": [],
+      "httpErrors": [],
+      "overviewLink": true,
+      "mediaLink": true,
+      "laboratoryGuides": 4
+    },
+    {
+      "name": "mobile-390",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "mobileEmulation": true,
+      "dimensions": {
+        "viewport": 390,
+        "page": 390,
+        "left": 31,
+        "right": 359,
+        "width": 328,
+        "height": 184.5,
+        "controls": true,
+        "playsInline": true,
+        "poster": "http://127.0.0.1:4174/videos/ponchado-utp-rj45-poster.jpg"
+      },
+      "playback": {
+        "duration": 142.198333,
+        "currentTime": 142.198333,
+        "ended": true,
+        "error": null,
+        "readyState": 4,
+        "width": 1024,
+        "height": 576,
+        "droppedFrames": 1468,
+        "totalFrames": 4265
+      },
+      "pageErrors": [],
+      "httpErrors": [],
+      "overviewLink": true,
+      "mediaLink": true,
+      "laboratoryGuides": 4
+    }
+  ]
+}
