@@ -1,14 +1,16 @@
 import React from 'react'
 import PageShell from '../components/PageShell'
+import ThirdTermDemos from '../components/ThirdTermDemos'
+import '../second-term.css'
 
 const base = '/materiales/tercer-corte/'
 const topics = [
-  {n:'01', tag:'CAPA DE RED', title:'El paquete encuentra su destino.', text:'La capa 3 del modelo OSI añade al segmento las direcciones IP de origen y destino. El host encapsula, los routers leen el destino y reenvían, y el receptor desencapsula. IP envía paquetes de forma independiente y con máximo esfuerzo: no promete entrega ni orden. Puede viajar por cobre, fibra o Wi‑Fi.', chips:['Paquete IP','Router','Mejor esfuerzo']},
-  {n:'02', tag:'ESTRUCTURA IPV4', title:'32 bits, dos partes.', text:'Una dirección IPv4 tiene cuatro octetos de 8 bits. La máscara indica qué bits identifican la red y cuáles al host. El prefijo CIDR expresa cuántos bits son de red: /26 deja 6 para hosts. Las direcciones privadas 10.0.0.0/8, 172.16.0.0/12 y 192.168.0.0/16 se usan dentro de redes locales.', chips:['4 octetos','Prefijo CIDR','Red + host']},
-  {n:'03', tag:'SUBREDES', title:'Calcular antes de configurar.', text:'Con h = 32 − prefijo hay 2^h direcciones por bloque; en una subred convencional se reservan red y broadcast, por eso quedan 2^h − 2 hosts. La red resulta de aplicar AND entre IP y máscara. La wildcard invierte la máscara; broadcast = red + wildcard. El primer host es red + 1 y el último, broadcast − 1.', chips:['Netmask','Wildcard','HostMin / HostMax']},
-  {n:'04', tag:'EJEMPLO /26', title:'De 192.168.10.75 a su bloque.', text:'Para 192.168.10.75/26, la máscara es 255.255.255.192 y el salto es 256 − 192 = 64. El 75 cae en el bloque .64–.127: red 192.168.10.64, wildcard 0.0.0.63, broadcast .127, hosts .65–.126 y 62 direcciones utilizables.', chips:['192.168.10.64/26','62 hosts','Gateway: .65']},
-  {n:'05', tag:'IPV6', title:'Más espacio y otra notación.', text:'IPv6 usa 128 bits escritos en ocho grupos hexadecimales; admite quitar ceros iniciales y comprimir una sola secuencia de grupos cero con ::. Una dirección global permite comunicación enrutada; FE80::/10 es local al enlace. SLAAC permite formar automáticamente una dirección a partir de anuncios del router. IPv6 no usa broadcast: emplea multicast.', chips:['128 bits','/64','SLAAC']},
-  {n:'06', tag:'ROUTING', title:'Cada salto consulta su tabla.', text:'Si el destino está en otra red, el host envía al gateway. El router elige la ruta coincidente más específica y reenvía con un nuevo encabezado de enlace; las MAC cambian en cada salto, las IP de extremo permanecen y el TTL disminuye. Las rutas C son conectadas, L locales, S estáticas y O aprendidas por OSPF. La ruta 0.0.0.0/0 cubre destinos sin otra coincidencia.', chips:['Gateway','Tabla de rutas','TTL']},
+  {id:'capa-red', n:'01', tag:'CAPA DE RED', title:'El paquete encuentra su destino.', text:'La capa 3 del modelo OSI añade al segmento las direcciones IP de origen y destino. El host encapsula, los routers leen el destino y reenvían, y el receptor desencapsula. IP envía paquetes de forma independiente y con máximo esfuerzo: no promete entrega ni orden. Puede viajar por cobre, fibra o Wi‑Fi.', chips:['Paquete IP','Router','Mejor esfuerzo']},
+  {id:'ipv4', n:'02', tag:'ESTRUCTURA IPV4', title:'32 bits, dos partes.', text:'Una dirección IPv4 tiene cuatro octetos de 8 bits. La máscara indica qué bits identifican la red y cuáles al host. El prefijo CIDR expresa cuántos bits son de red: /26 deja 6 para hosts. Las direcciones privadas 10.0.0.0/8, 172.16.0.0/12 y 192.168.0.0/16 se usan dentro de redes locales.', chips:['4 octetos','Prefijo CIDR','Red + host']},
+  {id:'subredes', n:'03', tag:'SUBREDES', title:'Calcular antes de configurar.', text:'Con h = 32 − prefijo hay 2^h direcciones por bloque; en una subred convencional se reservan red y broadcast, por eso quedan 2^h − 2 hosts. La red resulta de aplicar AND entre IP y máscara. La wildcard invierte la máscara; broadcast = red + wildcard. El primer host es red + 1 y el último, broadcast − 1.', chips:['Netmask','Wildcard','HostMin / HostMax']},
+  {id:'ejemplo', n:'04', tag:'EJEMPLO /26', title:'De 192.168.10.75 a su bloque.', text:'Para 192.168.10.75/26, la máscara es 255.255.255.192 y el salto es 256 − 192 = 64. El 75 cae en el bloque .64–.127: red 192.168.10.64, wildcard 0.0.0.63, broadcast .127, hosts .65–.126 y 62 direcciones utilizables.', chips:['192.168.10.64/26','62 hosts','Gateway: .65']},
+  {id:'ipv6', n:'05', tag:'IPV6', title:'Más espacio y otra notación.', text:'IPv6 usa 128 bits escritos en ocho grupos hexadecimales; admite quitar ceros iniciales y comprimir una sola secuencia de grupos cero con ::. Una dirección global permite comunicación enrutada; FE80::/10 es local al enlace. SLAAC permite formar automáticamente una dirección a partir de anuncios del router. IPv6 no usa broadcast: emplea multicast.', chips:['128 bits','/64','SLAAC']},
+  {id:'routing', n:'06', tag:'ROUTING', title:'Cada salto consulta su tabla.', text:'Si el destino está en otra red, el host envía al gateway. El router elige la ruta coincidente más específica y reenvía con un nuevo encabezado de enlace; las MAC cambian en cada salto, las IP de extremo permanecen y el TTL disminuye. Las rutas C son conectadas, L locales, S estáticas y O aprendidas por OSPF. La ruta 0.0.0.0/0 cubre destinos sin otra coincidencia.', chips:['Gateway','Tabla de rutas','TTL']},
 ]
 const resources = [
   ['Presentación · Direccionamiento IPv4','Direccionamiento y Estructura IPv4(1).pptx','Máscara, wildcard, rangos y ejemplo /26.'],
@@ -19,9 +21,14 @@ const resources = [
   ['Quiz · Tercer corte','Quiz_Redes_TercerCorte.html','Cuestionario interactivo incluido en los materiales de clase.'],
 ]
 
-export default function TercerCorte(){
-  return <PageShell eyebrow="3ER CORTE · CAPA DE RED" title="Direccionar, enrutar y comprobar." intro="Del cálculo de subredes al recorrido de un paquete entre dos LAN. Una guía de estudio basada en las presentaciones, talleres y materiales del tercer corte.">
+export default function TercerCorte({ route = 'tercer-corte', go }){
+  const id = route.split('/')[1]
+  const selected = topics.find(topic => topic.id === id)
+  return <PageShell eyebrow="3ER CORTE · CAPA DE RED" title={selected?.title || 'Direccionar, enrutar y comprobar.'} intro={selected?.text || 'Del cálculo de subredes al recorrido de un paquete entre dos LAN. Una guía de estudio basada en las presentaciones, talleres y materiales del tercer corte.'}>
     <section className="container content-stack third-cut">
+      <nav className="module-nav" aria-label="Módulos del tercer corte"><a href="#/tercer-corte" aria-current={!id ? 'page' : undefined}>Vista general</a>{topics.map(t => <a key={t.id} href={`#/tercer-corte/${t.id}`} aria-current={id === t.id ? 'page' : undefined}>{t.n} · {t.tag}</a>)}</nav>
+      {selected ? <div className="third-module"><p className="learning-goal"><span>OBJETIVO</span> Experimenta con {selected.tag.toLowerCase()} y explica el resultado.</p><ThirdTermDemos key={id} id={id}/><div className="module-pagination"><button onClick={() => go(`tercer-corte/${topics[(topics.indexOf(selected)+topics.length-1)%topics.length].id}`)}>← Módulo anterior</button><button onClick={() => go(`tercer-corte/${topics[(topics.indexOf(selected)+1)%topics.length].id}`)}>Siguiente módulo →</button></div></div> : <>
+      {id && <p role="status">Este módulo no existe. Elige uno del recorrido.</p>}
       <div className="three-pillars">
         <article><span>01</span><h3>Calcula</h3><p>Convierte IP y prefijo en máscara, red, broadcast y rango de hosts antes de asignar direcciones.</p></article>
         <article><span>02</span><h3>Configura</h3><p>Asigna IPv4 e IPv6 a PCs y routers, activa interfaces y crea rutas hacia redes remotas.</p></article>
@@ -29,7 +36,7 @@ export default function TercerCorte(){
       </div>
 
       <div className="section-heading"><span className="eyebrow">RUTA DE APRENDIZAJE</span><h2>Del bit al siguiente salto.</h2><p>Seis ideas conectadas, con un ejemplo que puedes repetir en Packet Tracer.</p></div>
-      <div className="third-grid">{topics.map(t=><article className="third-card" key={t.n}><span className="eyebrow">{t.n} · {t.tag}</span><h3>{t.title}</h3><p>{t.text}</p><div className="fact-chips">{t.chips.map(c=><code key={c}>{c}</code>)}</div></article>)}</div>
+      <div className="third-grid">{topics.map(t=><a className="third-card" key={t.n} href={`#/tercer-corte/${t.id}`}><span className="eyebrow">{t.n} · {t.tag}</span><h3>{t.title}</h3><p>{t.text}</p><div className="fact-chips">{t.chips.map(c=><code key={c}>{c}</code>)}</div><span className="module-enter">Explorar ejemplo ↗</span></a>)}</div>
 
       <div className="concept-band"><div><span className="eyebrow">DECISIÓN DEL HOST</span><h2>¿Destino local o remoto?</h2></div><p>El host compara la red del destino con la suya. Si coincide, busca al vecino en la LAN. Si no, entrega al gateway. Para llegar a otra LAN también debe existir una ruta de regreso: el ping necesita ida y vuelta.</p></div>
 
@@ -45,6 +52,7 @@ export default function TercerCorte(){
 
       <div className="section-heading"><span className="eyebrow">EVIDENCIA EXISTENTE</span><h2>Un taller resuelto, con resultados documentados.</h2><p>El archivo AVILAORTIZ incluye dos proyectos de Packet Tracer y un PDF con cálculos, capturas de configuración y pruebas de conectividad para 192.168.10.0/26. Las capturas pertenecen a ese documento; no representan los otros talleres.</p></div>
       <div className="third-resources"><a className="third-resource" href={base+'Taller_IPv4_Ortiz_Avila.pdf'} target="_blank" rel="noopener noreferrer"><span className="eyebrow">PDF · EVIDENCIA</span><strong>Ver taller resuelto y capturas</strong><p>IPs .36 y .9, gateway .1, HostMax .62 y pruebas de ping.</p><span className="text-link">Abrir evidencia ↗</span></a><a className="third-resource" href={base+'AVILAORTIZ.zip'} download><span className="eyebrow">ZIP · ARCHIVOS ORIGINALES</span><strong>Descargar AVILAORTIZ</strong><p>Incluye el PDF y dos archivos .pkz de Packet Tracer.</p><span className="text-link">Descargar ZIP ↓</span></a></div>
+      </>}
     </section>
   </PageShell>
 }
