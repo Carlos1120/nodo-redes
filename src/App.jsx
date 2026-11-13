@@ -5,6 +5,7 @@ import Arquitectura from './pages/Arquitectura'
 import Infraestructura from './pages/Infraestructura'
 import Labs from './pages/Labs'
 import Evidencias from './pages/Evidencias'
+import TercerCorte from './pages/TercerCorte'
 import NetworkBackdrop from './components/NetworkBackdrop'
 import useSectionReveal from './hooks/useSectionReveal'
 
@@ -15,6 +16,7 @@ const routes = {
   infraestructura: Infraestructura,
   labs: Labs,
   evidencias: Evidencias,
+  'tercer-corte': TercerCorte,
 }
 
 export default function App(){
@@ -25,7 +27,7 @@ export default function App(){
   const go=(name)=>{window.location.hash=`/${name}`}
   const Page=routes[route] || Home
   useSectionReveal(route)
-  const nav=[['inicio','Inicio'],['fundamentos','Fundamentos'],['arquitectura','Arquitectura'],['infraestructura','Infraestructura'],['labs','Packet Tracer'],['evidencias','Evidencias']]
+  const nav=[['inicio','Inicio'],['fundamentos','Fundamentos'],['arquitectura','Arquitectura'],['infraestructura','Infraestructura'],['labs','Packet Tracer'],['evidencias','Evidencias'],['tercer-corte','3er corte']]
   return <div className="app-shell">
     <NetworkBackdrop global />
     <header className="site-nav"><button className="brand" onClick={()=>go('inicio')}><span>N</span><strong>NODO</strong><small>REDES EN MOVIMIENTO</small></button><nav className={menu?'open':''}>{nav.map(([r,l])=><button key={r} className={route===r?'active':''} onClick={()=>go(r)}>{l}</button>)}</nav><button className="menu-btn" onClick={()=>setMenu(!menu)} aria-label="Abrir navegación">{menu?'×':'☰'}</button></header>
