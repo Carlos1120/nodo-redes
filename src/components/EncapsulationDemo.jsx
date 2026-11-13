@@ -1,41 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import useReducedMotion from '../hooks/useReducedMotion'
-
-const stages = [
-  { layer: '7', name: 'Aplicación', tag: 'Datos', copy: 'La aplicación prepara el mensaje “Hola”.' },
-  { layer: '4', name: 'Transporte', tag: 'TCP · puerto', copy: 'Transporte agrega puertos para identificar las aplicaciones.' },
-  { layer: '3', name: 'Red', tag: 'IP', copy: 'Red agrega direcciones IP para llegar a otra red.' },
-  { layer: '2', name: 'Enlace', tag: 'MAC', copy: 'Enlace agrega direcciones MAC para el siguiente salto local.' },
-  { layer: '1', name: 'Física', tag: 'Bits', copy: 'Física convierte todo en señales y bits.' },
-]
-
+import { encapsulationStages } from '../lib/network'
 export default function EncapsulationDemo() {
-  const [status, setStatus] = useState('idle')
-  const [step, setStep] = useState(-1)
-  const reducedMotion = useReducedMotion()
+  const [step, setStep] = useState(0), [running, setRunning] = useState(false), [receiving, setReceiving] = useState(false), [protocol, setProtocol] = useState('TCP')
+  const stages = encapsulationStages(protocol, receiving), current = stages[step]
   useEffect(() => {
-    if (status !== 'running') return undefined
-    if (step >= stages.length - 1) {
-      setStatus('complete')
-      return undefined
-    }
-    const timer = window.setTimeout(() => setStep((value) => value + 1), 620)
-    return () => window.clearTimeout(timer)
-  }, [status, step])
-  const run = () => {
-    if (reducedMotion) { setStep(stages.length - 1); setStatus('complete'); return }
-    setStep(0)
-    setStatus('running')
-  }
-  const reset = () => { setStep(-1); setStatus('idle') }
-  return (
-    <div className="encapsulation-demo">
-      <div className="encapsulation-heading"><div><span className="eyebrow">MINI DEMOSTRACIÓN</span><h3>Encapsulación</h3><p>Encapsular significa agregar información necesaria mientras los datos bajan por las capas.</p></div><div className="encapsulation-controls"><button type="button" onClick={run} disabled={status === 'running'}>▶ {status === 'complete' ? 'Ver de nuevo' : 'Ver encapsulación'}</button><button type="button" onClick={reset} disabled={status === 'idle'}>↻ Reiniciar</button></div></div>
-      <div className="encapsulation-flow" aria-live="polite">
-        {stages.map((item,index) => <div key={item.layer} className={index < step ? 'complete' : index === step ? 'active' : ''}><span>Capa {item.layer}</span><strong>{item.name}</strong><code>{item.tag}</code></div>)}
-        <div className="encapsulation-packet" style={{ '--step': Math.max(step, 0) }}><span>Hola</span>{stages.slice(0, step + 1).map((item) => <i key={item.layer}>{item.tag}</i>)}</div>
-      </div>
-      <p className="encapsulation-copy">{step >= 0 ? stages[step].copy : 'La demostración comienza cuando tú lo decidas.'}</p>
-    </div>
-  )
+    if (!running) return
+    if (step === 4) { setRunning(false); return }
+    const timer = setTimeout(() => setStep(n => n + 1), 1400)
+    return () => clearTimeout(timer)
+  }, [step, running])
+  function reset() { setRunning(false); setStep(0) }
+  return <div className="sim-panel pdu-simulator"><div className="sim-heading"><div><span className="eyebrow">PC0 → ROUTER0 → SERVER0</span><h3>{receiving ? 'Servidor receptor: desencapsulamiento' : 'Equipo emisor: encapsulamiento'}</h3></div></div>
+    <div className="sim-controls"><label>Transporte<select value={protocol} onChange={e => { setProtocol(e.target.value); reset() }}><option>TCP</option><option>UDP</option></select></label><button aria-pressed={receiving} onClick={() => { setReceiving(!receiving); reset() }}>Cambiar a {receiving ? 'encapsulamiento' : 'desencapsulamiento'}</button></div>
+    <ol className="pdu-track">{stages.map((s, i) => <li key={s.layer} className={i === step ? 'current' : i < step ? 'done' : ''}><span>0{i + 1}</span><strong>{s.layer}</strong><code>{s.pdu}</code></li>)}</ol>
+    <div className="pdu-packet" aria-live="polite"><span className="eyebrow">PASO {step + 1} / 5 · {current.pdu}</span><h4>{current.header}</h4><p>{current.copy}</p><div className="pdu-headers">{(receiving ? stages.slice(step) : stages.slice(0, step + 1).reverse()).map(s => <span key={s.layer}>{s.pdu}</span>)}</div></div>
+    <div className="sim-controls"><button onClick={() => { if (step === 4) setStep(0); setRunning(true) }} disabled={running}>Iniciar</button><button onClick={() => setRunning(false)} disabled={!running}>Pausar</button><button onClick={() => { setRunning(false); setStep(n => n - 1) }} disabled={step === 0}>Paso anterior</button><button onClick={() => { setRunning(false); setStep(n => n + 1) }} disabled={step === 4}>Siguiente paso</button><button onClick={reset}>Reiniciar PDU</button></div><p className="small-copy">Sin NAT: IP de origen y destino estables, MAC distintas en cada LAN. SMTP usa TCP/25 y DNS puede usar UDP/53 en este modelo. Se omiten handshake, TLS, fragmentación y respuestas para concentrarse en las PDU.</p></div>
 }

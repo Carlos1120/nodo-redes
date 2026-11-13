@@ -20,7 +20,7 @@ export function goToPractice(targetId, route = 'labs') {
     window.setTimeout(() => target.classList.remove('practice-highlight'), 1800)
     return true
   }
-  const currentRoute = window.location.hash.replace('#/','') || 'inicio'
+  const currentRoute = window.location.hash.replace('#/','').split('/')[0] || 'inicio'
   if (currentRoute === route && reveal()) return
   pendingPracticeTarget = targetId
   sessionStorage.setItem('nodo-practice-target', targetId)
